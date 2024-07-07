@@ -17,6 +17,8 @@ interface ImportMetaEnv {
   VITE_APP_API_URL: string;
   /** 是否开启 Mock 服务 */
   VITE_MOCK_DEV_SERVER: boolean;
+
+  VUE_APP_BASE_MODE: string;
 }
 
 interface ImportMeta {

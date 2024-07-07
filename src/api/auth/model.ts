@@ -30,6 +30,7 @@ export interface LoginResult {
    * 访问token
    */
   accessToken?: string;
+  access_token?: string;
   /**
    * 过期时间(单位：毫秒)
    */

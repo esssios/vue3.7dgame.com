@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import type { App } from "vue";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 
 export const Layout = () => import("@/layout/index.vue");
+export const siteLayout = () => import("@/site-layout/index.vue");
 
 // 静态路由
 export const constantRoutes: RouteRecordRaw[] = [
@@ -21,6 +23,21 @@ export const constantRoutes: RouteRecordRaw[] = [
     path: "/login",
     component: () => import("@/views/login/index.vue"),
     meta: { hidden: true },
+  },
+  {
+    path: "/site",
+    name: "Site",
+    component: siteLayout,
+    meta: { hidden: true },
+    redirect: "/site/login",
+    children: [
+      {
+        path: "login",
+        meta: { title: "登陆" },
+        name: "SiteLogin",
+        component: () => import("@/views/login-demo/index.vue"),
+      },
+    ],
   },
 
   {

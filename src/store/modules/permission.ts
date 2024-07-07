@@ -71,6 +71,7 @@ export const usePermissionStore = defineStore("permission", () => {
 
   // actions
   function setRoutes(newRoutes: RouteRecordRaw[]) {
+    console.log("test");
     routes.value = constantRoutes.concat(newRoutes);
   }
 

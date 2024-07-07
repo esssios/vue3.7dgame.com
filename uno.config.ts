@@ -22,6 +22,15 @@ export default defineConfig({
     "absolute-rt": "absolute right-0 top-0 ",
     "fixed-lt": "fixed left-0 top-0",
   },
+  rules: [
+    [
+      "card-shadow",
+      {
+        "box-shadow":
+          "0 1px 2px -2px #00000029, 0 3px 6px #0000001f, 0 5px 12px 4px #00000017",
+      },
+    ],
+  ],
   theme: {
     colors: {
       primary: "var(--el-color-primary)",

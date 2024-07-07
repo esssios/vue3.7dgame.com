@@ -3,7 +3,7 @@
     <transition-group
       enter-active-class="animate__animated animate__fadeInRight"
     >
-      <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.path">
+      <!-- <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.path">
         <span
           v-if="
             item.redirect === 'noredirect' || index === breadcrumbs.length - 1
@@ -14,12 +14,34 @@
         <a v-else @click.prevent="handleLink(item)">
           {{ translateRouteTitle(item.meta.title) }}
         </a>
+      </el-breadcrumb-item> -->
+      <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.path">
+        <span
+          v-if="
+            item.redirect === 'noRedirect' || index == breadcrumbs.length - 1
+          "
+          class="no-redirect font-text"
+        >
+          {{ item.meta.title }}
+        </span>
+        <a v-else @click.prevent="handleLink(item)">
+          <span
+            class="font-title"
+            v-if="item.meta.title === '元宇宙实景编程平台'"
+          >
+            {{ item.meta.title }}
+          </span>
+          <span class="font-text" v-else>
+            {{ item.meta.title }}
+          </span>
+        </a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
 </template>
 
 <script setup lang="ts">
+import "@/assets/font/font.css";
 import { RouteLocationMatched } from "vue-router";
 import { compile } from "path-to-regexp";
 import router from "@/router";
@@ -41,12 +63,13 @@ function getBreadcrumb() {
   const first = matched[0];
   if (!isDashboard(first)) {
     matched = [
-      { path: "/dashboard", meta: { title: "dashboard" } } as any,
+      { path: "/dashboard", meta: { title: "混合现实编程" } } as any,
     ].concat(matched);
   }
   breadcrumbs.value = matched.filter((item) => {
     return item.meta && item.meta.title && item.meta.breadcrumb !== false;
   });
+  console.log(breadcrumbs.value);
 }
 
 function isDashboard(route: RouteLocationMatched) {

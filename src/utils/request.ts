@@ -2,6 +2,7 @@ import axios, { InternalAxiosRequestConfig, AxiosResponse } from "axios";
 import { useUserStoreHook } from "@/store/modules/user";
 import { ResultEnum } from "@/enums/ResultEnum";
 import { TOKEN_KEY } from "@/enums/CacheEnum";
+import { log } from "console";
 
 // 创建 axios 实例
 const service = axios.create({
@@ -35,6 +36,7 @@ service.interceptors.response.use(
       return response;
     }
 
+    return response.data;
     const { code, data, msg } = response.data;
     if (code === ResultEnum.SUCCESS) {
       return data;

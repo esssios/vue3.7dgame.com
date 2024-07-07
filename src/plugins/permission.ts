@@ -1,12 +1,12 @@
 import router from "@/router";
-import { useUserStore, usePermissionStore } from "@/store";
+import { useUserStore, usePermissionStore, useSiteUserStore } from "@/store";
 import NProgress from "@/utils/nprogress";
 import { RouteRecordRaw } from "vue-router";
 import { TOKEN_KEY } from "@/enums/CacheEnum";
 
 export function setupPermission() {
   // 白名单路由
-  const whiteList = ["/login"];
+  const whiteList = ["/login", "/site", "/site/login"];
 
   router.beforeEach(async (to, from, next) => {
     NProgress.start();
@@ -17,9 +17,12 @@ export function setupPermission() {
         next({ path: "/" });
         NProgress.done();
       } else {
-        const userStore = useUserStore();
+        // const userStore = useUserStore();
+        const siteUserStore = useSiteUserStore();
         const hasRoles =
-          userStore.user.roles && userStore.user.roles.length > 0;
+          // userStore.user.roles && userStore.user.roles.length > 0;
+          siteUserStore.siteUser.roles &&
+          siteUserStore.siteUser.roles.length > 0;
         if (hasRoles) {
           // 未匹配到任何路由，跳转404
           if (to.matched.length === 0) {
@@ -37,15 +40,15 @@ export function setupPermission() {
         } else {
           const permissionStore = usePermissionStore();
           try {
-            const { roles } = await userStore.getUserInfo();
-            const accessRoutes = await permissionStore.generateRoutes(roles);
-            accessRoutes.forEach((route: RouteRecordRaw) => {
-              router.addRoute(route);
-            });
+            const { roles } = await siteUserStore.getUserInfo();
+            // const accessRoutes = await permissionStore.generateRoutes(roles);
+            // accessRoutes.forEach((route: RouteRecordRaw) => {
+            //   router.addRoute(route);
+            // });
             next({ ...to, replace: true });
           } catch (error) {
             // 移除 token 并跳转登录页
-            await userStore.resetToken();
+            await siteUserStore.resetToken();
             // 重定向到登录页，并携带当前页面路由和参数，作为登录成功后跳转的页面
             const params = new URLSearchParams(
               to.query as Record<string, string>
@@ -54,7 +57,8 @@ export function setupPermission() {
             const redirect = queryString
               ? `${to.path}?${queryString}`
               : to.path;
-            next(`/login?redirect=${encodeURIComponent(redirect)}`);
+            // next(`/login?redirect=${encodeURIComponent(redirect)}`);
+            next(`/site/login?redirect=${encodeURIComponent(redirect)}`);
             NProgress.done();
           }
         }
@@ -69,7 +73,9 @@ export function setupPermission() {
         const params = new URLSearchParams(to.query as Record<string, string>);
         const queryString = params.toString();
         const redirect = queryString ? `${to.path}?${queryString}` : to.path;
-        next(`/login?redirect=${encodeURIComponent(redirect)}`);
+        // next(`/login?redirect=${encodeURIComponent(redirect)}`);
+        next(`/site/login?redirect=${encodeURIComponent(redirect)}`);
+
         NProgress.done();
       }
     }

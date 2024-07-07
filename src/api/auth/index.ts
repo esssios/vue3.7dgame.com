@@ -25,6 +25,20 @@ class AuthAPI {
   }
 
   /**
+   * 登录API
+   *
+   * @param data {LoginData}
+   * @returns
+   */
+  static loginDemo(data: LoginData) {
+    return request<any, LoginResult>({
+      url: "/sites/login",
+      method: "post",
+      data,
+    });
+  }
+
+  /**
    * 注销API
    */
   static logout() {
